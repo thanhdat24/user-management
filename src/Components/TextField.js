@@ -1,5 +1,4 @@
-import React, { Fragment } from "react";
-
+import React from "react";
 import styled from "styled-components";
 
 export const Input = styled.input`
@@ -50,6 +49,8 @@ export const TextFieldUserType = ({
   label,
   option1,
   option2,
+  value1,
+  value2,
   textDanger,
   ...props
 }) => {
@@ -58,8 +59,8 @@ export const TextFieldUserType = ({
       <Label>{label}</Label>
       <br />
       <Select {...props}>
-        <Option>{option1}</Option>
-        <Option>{option2}</Option>
+        <Option value={value1}>{option1}</Option>
+        <Option value={value2}>{option2}</Option>
       </Select>
 
       <span className="text text-danger">{textDanger}</span>
