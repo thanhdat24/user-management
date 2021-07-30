@@ -2,18 +2,46 @@ import React, { Component } from "react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "../Components/Table";
 
 import { Button } from "../Components/Button";
+import { connect } from "react-redux";
 
-export default class UserList extends Component {
+class UserList extends Component {
+  renderUserList = () => {
+    return this.props.userList.map((user, index) => {
+      return (
+        <tr key={index}>
+          <Td>{user.No}</Td>
+          <Td>{user.account}</Td>
+          <Td>{user.name} </Td>
+          <Td>{user.password}</Td>
+          <Td>{user.email}</Td>
+          <Td>{user.phone}</Td>
+          <Td>{user.userType ? "Customer" : "Client"}</Td>
+          <Td>
+            <Button Edit>Edit</Button>
+            <Button>Delete</Button>
+          </Td>
+        </tr>
+      );
+    });
+  };
   render() {
     return (
       <div>
+        <div
+          style={{
+            backgroundColor: "#242424",
+            height: 50,
+            flexDirection: "row",
+            alignItems: "center",
+            fontSize: "20px",
+          }}
+          class="user-list text-light d-flex pl-4 "
+          colSpan="8"
+        >
+          User List
+        </div>
         <Table>
           <Thead>
-            <Tr>
-              <Th colSpan="8">User List</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
             <Tr>
               <Td>No.</Td>
               <Td>Account</Td>
@@ -24,35 +52,15 @@ export default class UserList extends Component {
               <Td>User Type</Td>
               <Td></Td>
             </Tr>
-            <Tr>
-              <Td>1</Td>
-              <Td>thanhdat24</Td>
-              <Td>Lê Thành Đạt</Td>
-              <Td>123</Td>
-              <Td>thanhledatomon@gmail.com</Td>
-              <Td>0916671369</Td>
-              <Td>Customer</Td>
-              <Td>
-                <Button Edit>Edit</Button>
-                <Button>Delete</Button>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>2</Td>
-              <Td>ngocdiep11</Td>
-              <Td>Trần Thị Ngọc Diệp</Td>
-              <Td>123</Td>
-              <Td>ngocdiep710@gmail.com</Td>
-              <Td>0946379177</Td>
-              <Td>Client</Td>
-              <Td>
-                <Button Edit>Edit</Button>
-                <Button>Delete</Button>
-              </Td>
-            </Tr>
-          </Tbody>
+          </Thead>
+          <Tbody>{this.renderUserList()}</Tbody>
         </Table>
       </div>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return { userList: state.UserManagementReducer.userList };
+};
+
+export default connect(mapStateToProps)(UserList);

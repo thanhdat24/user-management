@@ -8,7 +8,6 @@ export const Table = styled.table`
 export const Thead = styled.thead`
   display: table-header-group;
   vertical-align: middle;
-  color: white;
 `;
 
 export const Tbody = styled.tbody`
@@ -27,7 +26,6 @@ export const Td = styled.td`
 `;
 
 export const Th = styled.th`
-  background-color: #242424;
   vertical-align: bottom;
   text-align: inherit;
   padding: 0.75rem;
