@@ -3,23 +3,26 @@ import { TextField, TextFieldUserType } from "../Components/TextField";
 
 import { Button } from "../Components/Button";
 import { Heading3 } from "../Components/Heading";
+import { addUserAction } from "../redux/actions/UserManagementActions";
+import { connect } from "react-redux";
 
-export default class RegisterForm extends Component {
+class RegisterForm extends Component {
   state = {
     values: {
       account: "",
-      fullname: "",
+      name: "",
       password: "",
       phone: "",
       email: "",
-      dropdown: 1,
+      userType: "Customer",
     },
     errors: {
       account: "",
-      fullname: "",
+      name: "",
       password: "",
       phone: "",
       email: "",
+      userType: "",
     },
   };
 
@@ -28,7 +31,7 @@ export default class RegisterForm extends Component {
     console.log(name, value);
     let newValue = { ...this.state.values, [name]: value };
     let newError = { ...this.state.errors };
-    if (name === "account" || name === "fullname") {
+    if (name === "account" || name === "name") {
       if (value.trim() === "") newError[name] = name + " is required!";
       else newError[name] = "";
     }
@@ -52,13 +55,13 @@ export default class RegisterForm extends Component {
         newError[name] = "";
       }
     }
-
     this.setState({
       values: newValue,
       errors: newError,
     });
   };
-  handleSubmit = (event) => {
+  handleOnSubmit = (event) => {
+    //Prevent he browser reload page
     event.preventDefault();
     let { values, errors } = this.state;
     let valid = true;
@@ -70,9 +73,12 @@ export default class RegisterForm extends Component {
     }
 
     if (!valid) {
-      alert("Fail!");
+      alert("Input invalid. Please try again");
       return;
-    } else alert("Success!");
+    } else {
+      alert("Success!");
+      this.props.dispatch(addUserAction(this.state.values));
+    }
   };
   render() {
     return (
@@ -84,7 +90,7 @@ export default class RegisterForm extends Component {
           Registration
         </Heading3>
         <div className="card-body">
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleOnSubmit}>
             <div className="row">
               <div className="col-sm-6">
                 {" "}
@@ -101,11 +107,11 @@ export default class RegisterForm extends Component {
                 {" "}
                 <TextField
                   type="text"
-                  name="fullname"
+                  name="name"
                   required
                   label="Full Name"
                   onChange={this.handleChangeValue}
-                  textDanger={this.state.errors.fullname}
+                  textDanger={this.state.errors.name}
                 ></TextField>
               </div>
               <div className="col-sm-6">
@@ -154,9 +160,7 @@ export default class RegisterForm extends Component {
               </div>
             </div>
             <div className="mt-3">
-              <Button type="submit" value="submit" SignUp>
-                Register
-              </Button>
+              <Button SignUp>Register</Button>
               <Button Update>Update</Button>
             </div>
           </form>
@@ -165,3 +169,4 @@ export default class RegisterForm extends Component {
     );
   }
 }
+export default connect()(RegisterForm);

@@ -1,3 +1,5 @@
+import { add_user } from "../types/UserManagementTypes";
+
 const initialState = {
   userList: [
     {
@@ -7,7 +9,7 @@ const initialState = {
       password: "123",
       email: "thanhledatomon@gmail.com",
       phone: "0916671369",
-      userType: true, //Customer
+      userType: "Customer", //Customer
     },
     {
       No: "2",
@@ -16,14 +18,30 @@ const initialState = {
       password: "123",
       email: "ngocdiep710@gmail.com",
       phone: "0946379177",
-      userType: false, //Client
+      userType: "Client", //Client
     },
   ],
 };
 
-export default (state = initialState, action) => {
+export const UserManagementReducer = (state = initialState, action) => {
   switch (action.type) {
+    case add_user: {
+      let userListUpdate = [...state.userList];
+      let index = userListUpdate.findIndex(
+        (user) => user.account === action.newUser.account
+      );
+      if (index !== -1) {
+        alert("Account already exists!");
+        return { ...state };
+      }
+      userListUpdate.push(action.newUser);
+      state.userList = userListUpdate;
+      console.log(userListUpdate);
+      return { ...state };
+    }
     default:
       return { ...state };
   }
 };
+
+export default UserManagementReducer;

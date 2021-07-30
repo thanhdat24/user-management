@@ -9,13 +9,13 @@ class UserList extends Component {
     return this.props.userList.map((user, index) => {
       return (
         <tr key={index}>
-          <Td>{user.No}</Td>
+          <Td>{index + 1}</Td>
           <Td>{user.account}</Td>
           <Td>{user.name} </Td>
           <Td>{user.password}</Td>
           <Td>{user.email}</Td>
           <Td>{user.phone}</Td>
-          <Td>{user.userType ? "Customer" : "Client"}</Td>
+          <Td>{user.userType}</Td>
           <Td>
             <Button Edit>Edit</Button>
             <Button>Delete</Button>
@@ -35,7 +35,7 @@ class UserList extends Component {
             alignItems: "center",
             fontSize: "20px",
           }}
-          class="user-list text-light d-flex pl-4 "
+          className="user-list text-light d-flex pl-4 "
           colSpan="8"
         >
           User List
@@ -50,7 +50,6 @@ class UserList extends Component {
               <Td>Email</Td>
               <Td>Phone Number</Td>
               <Td>User Type</Td>
-              <Td></Td>
             </Tr>
           </Thead>
           <Tbody>{this.renderUserList()}</Tbody>
