@@ -3,6 +3,7 @@ import { Table, Tbody, Td, Th, Thead, Tr } from "../Components/Table";
 
 import { Button } from "../Components/Button";
 import { connect } from "react-redux";
+import { deleteUserAction } from "../redux/actions/UserManagementActions";
 
 class UserList extends Component {
   renderUserList = () => {
@@ -18,7 +19,13 @@ class UserList extends Component {
           <Td>{user.userType}</Td>
           <Td>
             <Button Edit>Edit</Button>
-            <Button>Delete</Button>
+            <Button
+              onClick={() => {
+                this.props.dispatch(deleteUserAction(user.account));
+              }}
+            >
+              Delete
+            </Button>
           </Td>
         </tr>
       );

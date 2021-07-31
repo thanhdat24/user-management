@@ -1,4 +1,4 @@
-import { add_user } from "../types/UserManagementTypes";
+import { add_user, delete_user } from "../types/UserManagementTypes";
 
 const initialState = {
   userList: [
@@ -32,12 +32,20 @@ export const UserManagementReducer = (state = initialState, action) => {
       );
       if (index !== -1) {
         alert("Account already exists!");
+
         return { ...state };
       }
       userListUpdate.push(action.newUser);
-      state.userList = userListUpdate;
       console.log(userListUpdate);
-      return { ...state };
+      return { ...state, userList: userListUpdate };
+    }
+    case delete_user: {
+      return {
+        ...state,
+        userList: state.userList.filter(
+          (user) => user.account !== action.userAccount
+        ),
+      };
     }
     default:
       return { ...state };
