@@ -1,3 +1,5 @@
+import "./UserManagement.css";
+
 import React, { Component } from "react";
 import { TextField, TextFieldUserType } from "../Components/TextField";
 
@@ -15,6 +17,8 @@ class RegisterForm extends Component {
       phone: "",
       email: "",
       userType: "Customer",
+      disabled: true,
+      disabledAccount: false,
     },
     errors: {
       account: "",
@@ -80,6 +84,41 @@ class RegisterForm extends Component {
       this.props.dispatch(addUserAction(this.state.values));
     }
   };
+  renderTextFieldAccount = () => {
+    return this.state.values.account ? (
+      <TextField
+        style={{ cursor: "no-drop" }}
+        disabled
+        value={this.state.values.account}
+        type="text"
+        name="account"
+        required
+        label="Account"
+        onChange={this.handleChangeValue}
+        textDanger={this.state.errors.account}
+      ></TextField>
+    ) : (
+      <TextField
+        value={this.state.values.account}
+        type="text"
+        name="account"
+        required
+        label="Account"
+        onChange={this.handleChangeValue}
+        textDanger={this.state.errors.account}
+      ></TextField>
+    );
+  };
+  renderButtonUpdate = () => {
+    return this.state.values.disabled ? (
+      <Button disabled Update>
+        Update
+      </Button>
+    ) : (
+      <Button Update>Update</Button>
+    );
+  };
+
   render() {
     return (
       <div className="card text-left">
@@ -92,20 +131,11 @@ class RegisterForm extends Component {
         <div className="card-body">
           <form onSubmit={this.handleOnSubmit}>
             <div className="row">
+              <div className="col-sm-6"> {this.renderTextFieldAccount()}</div>
               <div className="col-sm-6">
                 {" "}
                 <TextField
-                  type="text"
-                  name="account"
-                  required
-                  label="Account"
-                  onChange={this.handleChangeValue}
-                  textDanger={this.state.errors.account}
-                ></TextField>
-              </div>
-              <div className="col-sm-6">
-                {" "}
-                <TextField
+                  value={this.state.values.name}
                   type="text"
                   name="name"
                   required
@@ -117,6 +147,7 @@ class RegisterForm extends Component {
               <div className="col-sm-6">
                 {" "}
                 <TextField
+                  value={this.state.values.password}
                   type="password"
                   name="password"
                   required
@@ -128,6 +159,7 @@ class RegisterForm extends Component {
               <div className="col-sm-6">
                 {" "}
                 <TextField
+                  value={this.state.values.phone}
                   type="phone"
                   name="phone"
                   required
@@ -139,6 +171,7 @@ class RegisterForm extends Component {
               <div className="col-sm-6">
                 {" "}
                 <TextField
+                  value={this.state.values.email}
                   type="email"
                   name="email"
                   required
@@ -149,6 +182,7 @@ class RegisterForm extends Component {
               </div>
               <div className="col-sm-6">
                 <TextFieldUserType
+                  value={this.state.values.userType}
                   label="User Type"
                   option1="Customer"
                   option2="Client"
@@ -161,12 +195,26 @@ class RegisterForm extends Component {
             </div>
             <div className="mt-3">
               <Button SignUp>Register</Button>
-              <Button Update>Update</Button>
+              {this.renderButtonUpdate()}
             </div>
           </form>
         </div>
       </div>
     );
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.userEdit.account !== this.props.userEdit.account) {
+      this.setState({
+        values: this.props.userEdit,
+      });
+    }
+  }
 }
-export default connect()(RegisterForm);
+
+const mapStateToProps = (state) => {
+  return {
+    userEdit: state.UserManagementReducer.userEdit,
+  };
+};
+
+export default connect(mapStateToProps)(RegisterForm);

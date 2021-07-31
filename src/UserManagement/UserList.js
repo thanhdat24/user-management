@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "../Components/Table";
+import {
+  deleteUserAction,
+  editUserAction,
+} from "../redux/actions/UserManagementActions";
 
 import { Button } from "../Components/Button";
 import { connect } from "react-redux";
-import { deleteUserAction } from "../redux/actions/UserManagementActions";
 
 class UserList extends Component {
   renderUserList = () => {
@@ -18,7 +21,22 @@ class UserList extends Component {
           <Td>{user.phone}</Td>
           <Td>{user.userType}</Td>
           <Td>
-            <Button Edit>Edit</Button>
+            <Button
+              onClick={() => {
+                this.setState(
+                  {
+                    disabled: false,
+                    disabledAccount: true,
+                  },
+                  () => {
+                    this.props.dispatch(editUserAction(user));
+                  }
+                );
+              }}
+              Edit
+            >
+              Edit
+            </Button>
             <Button
               onClick={() => {
                 this.props.dispatch(deleteUserAction(user.account));
@@ -66,7 +84,9 @@ class UserList extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  return { userList: state.UserManagementReducer.userList };
+  return {
+    userList: state.UserManagementReducer.userList,
+  };
 };
 
 export default connect(mapStateToProps)(UserList);

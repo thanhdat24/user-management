@@ -1,4 +1,4 @@
-import { add_user, delete_user } from "../types/UserManagementTypes";
+import { add_user, delete_user, edit_user } from "../types/UserManagementTypes";
 
 const initialState = {
   userList: [
@@ -21,6 +21,15 @@ const initialState = {
       userType: "Client", //Client
     },
   ],
+  userEdit: {
+    No: "",
+    account: "",
+    name: "",
+    password: "",
+    email: "",
+    phone: "",
+    userType: "", //Customer
+  },
 };
 
 export const UserManagementReducer = (state = initialState, action) => {
@@ -46,6 +55,9 @@ export const UserManagementReducer = (state = initialState, action) => {
           (user) => user.account !== action.userAccount
         ),
       };
+    }
+    case edit_user: {
+      return { ...state, userEdit: action.user };
     }
     default:
       return { ...state };
