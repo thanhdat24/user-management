@@ -7,7 +7,6 @@ import { ThemeProvider } from "styled-components";
 import UserList from "./UserList";
 
 export default class UserManagement extends Component {
-  
   render() {
     return (
       <ThemeProvider theme={PrimaryTheme}>

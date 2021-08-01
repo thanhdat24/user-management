@@ -33,37 +33,15 @@ export const Option = styled.option`
   color: ${(props) => props.theme.color};
   border: 1px solid ${(props) => props.theme.color};
 `;
-export const TextField = ({ label, textDanger, ...props }) => {
+export const TextField = ({ label, textDanger, cssInput, ...props }) => {
   return (
     <span>
       <Label>{label}</Label>
       <br />
 
-      <Input {...props} />
+      <Input className="form-control" {...props} />
       <span className="text text-danger">{textDanger}</span>
     </span>
   );
 };
 
-export const TextFieldUserType = ({
-  label,
-  option1,
-  option2,
-  value1,
-  value2,
-  textDanger,
-  ...props
-}) => {
-  return (
-    <span>
-      <Label>{label}</Label>
-      <br />
-      <Select {...props}>
-        <Option value={value1}>{option1}</Option>
-        <Option value={value2}>{option2}</Option>
-      </Select>
-
-      <span className="text text-danger">{textDanger}</span>
-    </span>
-  );
-};

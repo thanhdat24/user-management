@@ -30,4 +30,5 @@ export const Th = styled.th`
   text-align: inherit;
   padding: 0.75rem;
   vertical-align: top;
+  border-bottom: 3px solid #ebebeb;
 `;

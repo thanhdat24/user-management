@@ -1,4 +1,9 @@
-import { add_user, delete_user, edit_user } from "../types/UserManagementTypes";
+import {
+  add_user,
+  delete_user,
+  edit_user,
+  update_user,
+} from "../types/UserManagementTypes";
 
 export const addUserAction = (newUser) => ({
   type: add_user,
@@ -13,4 +18,9 @@ export const deleteUserAction = (userAccount) => ({
 export const editUserAction = (user) => ({
   type: edit_user,
   user,
+});
+
+export const updateUserAction = (newUser) => ({
+  type: update_user,
+  newUser,
 });

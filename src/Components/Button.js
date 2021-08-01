@@ -10,13 +10,13 @@ export const Button = styled.button`
   font-weight: bold;
   margin-right: 5px;
   background-color: ${(props) =>
-    props.SignUp
-      ? "green"
+    props.Register
+      ? "#28a745"
       : props.Update
-      ? "blue"
+      ? "#007bff"
       : props.Edit
-      ? "blue"
-      : "red"};
+      ? "#007bff"
+      : "#dc3545"};
   transition: 0.5s all;
   &:hover {
     color: black;
@@ -25,6 +25,11 @@ export const Button = styled.button`
   }
   &:disabled {
     cursor: no-drop;
-   
+    opacity: 0.65;
+    &:hover {
+      background-color: ${(props) => (props.Register ? "#28a745" : "#007bff")};
+      border: 1px solid ${(props) => (props.Register ? "#28a745" : "#007bff")};
+      color: ${(props) => (props.Register = "#fff")};
+    }
   }
 `;

@@ -23,15 +23,7 @@ class UserList extends Component {
           <Td>
             <Button
               onClick={() => {
-                this.setState(
-                  {
-                    disabled: false,
-                    disabledAccount: true,
-                  },
-                  () => {
-                    this.props.dispatch(editUserAction(user));
-                  }
-                );
+                this.props.dispatch(editUserAction(user));
               }}
               Edit
             >
@@ -65,20 +57,23 @@ class UserList extends Component {
         >
           User List
         </div>
-        <Table>
-          <Thead>
-            <Tr>
-              <Td>No.</Td>
-              <Td>Account</Td>
-              <Td>Full Name</Td>
-              <Td>Password</Td>
-              <Td>Email</Td>
-              <Td>Phone Number</Td>
-              <Td>User Type</Td>
-            </Tr>
-          </Thead>
-          <Tbody>{this.renderUserList()}</Tbody>
-        </Table>
+      
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>No.</Th>
+                <Th>Account</Th>
+                <Th>Full Name</Th>
+                <Th>Password</Th>
+                <Th>Email</Th>
+                <Th>Phone Number</Th>
+                <Th>User Type</Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
+            <Tbody>{this.renderUserList()}</Tbody>
+          </Table>
+     
       </div>
     );
   }

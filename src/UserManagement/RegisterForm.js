@@ -1,11 +1,15 @@
 import "./UserManagement.css";
 
+import { Label, Option, Select, TextField } from "../Components/TextField";
 import React, { Component } from "react";
-import { TextField, TextFieldUserType } from "../Components/TextField";
+import {
+  addUserAction,
+  updateUserAction,
+} from "../redux/actions/UserManagementActions";
 
 import { Button } from "../Components/Button";
 import { Heading3 } from "../Components/Heading";
-import { addUserAction } from "../redux/actions/UserManagementActions";
+import Swal from "sweetalert2";
 import { connect } from "react-redux";
 
 class RegisterForm extends Component {
@@ -17,8 +21,6 @@ class RegisterForm extends Component {
       phone: "",
       email: "",
       userType: "Customer",
-      disabled: true,
-      disabledAccount: false,
     },
     errors: {
       account: "",
@@ -65,7 +67,7 @@ class RegisterForm extends Component {
     });
   };
   handleOnSubmit = (event) => {
-    //Prevent he browser reload page
+    // Prevent the browser reload page
     event.preventDefault();
     let { values, errors } = this.state;
     let valid = true;
@@ -77,48 +79,54 @@ class RegisterForm extends Component {
     }
 
     if (!valid) {
-      alert("Input invalid. Please try again");
+      Swal.fire({
+        title: "Error!",
+        text: "Invalid input. Please try again!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       return;
-    } else {
-      alert("Success!");
-      this.props.dispatch(addUserAction(this.state.values));
     }
+    let { name } = event.target;
+    let msgContent = "";
+    if (name === "register") {
+      this.props.dispatch(addUserAction(this.state.values));
+      msgContent = "Regsiter success!";
+    } else if (name === "update") {
+      this.props.dispatch(updateUserAction(this.state.values));
+      msgContent = "Update success!";
+    }
+    Swal.fire({
+      title: "Success!",
+      text: msgContent,
+      icon: "success",
+      confirmButtonText: "OK",
+    });
   };
-  renderTextFieldAccount = () => {
-    return this.state.values.account ? (
-      <TextField
-        style={{ cursor: "no-drop" }}
-        disabled
-        value={this.state.values.account}
-        type="text"
-        name="account"
-        required
-        label="Account"
-        onChange={this.handleChangeValue}
-        textDanger={this.state.errors.account}
-      ></TextField>
-    ) : (
-      <TextField
-        value={this.state.values.account}
-        type="text"
-        name="account"
-        required
-        label="Account"
-        onChange={this.handleChangeValue}
-        textDanger={this.state.errors.account}
-      ></TextField>
-    );
-  };
+
   renderButtonUpdate = () => {
-    return this.state.values.disabled ? (
+    return this.props.disabled ? (
       <Button disabled Update>
         Update
       </Button>
     ) : (
-      <Button Update>Update</Button>
+      <Button name="update" onClick={this.handleOnSubmit} Update>
+        Update
+      </Button>
     );
   };
 
+  renderButtonRegister = () => {
+    return this.props.disabled ? (
+      <Button name="register" onClick={this.handleOnSubmit} Register>
+        Register
+      </Button>
+    ) : (
+      <Button disabled Register>
+        Register
+      </Button>
+    );
+  };
   render() {
     return (
       <div className="card text-left">
@@ -129,9 +137,32 @@ class RegisterForm extends Component {
           Registration
         </Heading3>
         <div className="card-body">
-          <form onSubmit={this.handleOnSubmit}>
+          <form className="group-border">
             <div className="row">
-              <div className="col-sm-6"> {this.renderTextFieldAccount()}</div>
+              <div className="col-sm-6">
+                {this.props.disableAccount ? (
+                  <TextField
+                    disabled
+                    value={this.state.values.account}
+                    type="text"
+                    name="account"
+                    required
+                    label="Account"
+                    onChange={this.handleChangeValue}
+                    textDanger={this.state.errors.account}
+                  ></TextField>
+                ) : (
+                  <TextField
+                    value={this.state.values.account}
+                    type="text"
+                    name="account"
+                    required
+                    label="Account"
+                    onChange={this.handleChangeValue}
+                    textDanger={this.state.errors.account}
+                  ></TextField>
+                )}
+              </div>
               <div className="col-sm-6">
                 {" "}
                 <TextField
@@ -181,20 +212,20 @@ class RegisterForm extends Component {
                 ></TextField>
               </div>
               <div className="col-sm-6">
-                <TextFieldUserType
+                <Label>User Type</Label>
+                <Select
+                  name="userType"
                   value={this.state.values.userType}
-                  label="User Type"
-                  option1="Customer"
-                  option2="Client"
                   onChange={this.handleChangeValue}
-                  value1="1"
-                  value2="2"
-                  name="dropdown"
-                ></TextFieldUserType>
+                  className="form-control"
+                >
+                  <Option defaultValue>Customer</Option>
+                  <Option>Client</Option>
+                </Select>
               </div>
             </div>
             <div className="mt-3">
-              <Button SignUp>Register</Button>
+              {this.renderButtonRegister()}
               {this.renderButtonUpdate()}
             </div>
           </form>
@@ -206,6 +237,14 @@ class RegisterForm extends Component {
     if (prevProps.userEdit.account !== this.props.userEdit.account) {
       this.setState({
         values: this.props.userEdit,
+        errors: {
+          account: "",
+          name: "",
+          password: "",
+          phone: "",
+          email: "",
+          userType: "",
+        },
       });
     }
   }
@@ -214,6 +253,8 @@ class RegisterForm extends Component {
 const mapStateToProps = (state) => {
   return {
     userEdit: state.UserManagementReducer.userEdit,
+    disabled: state.UserManagementReducer.disableButton,
+    disableAccount: state.UserManagementReducer.disableAccount,
   };
 };
 

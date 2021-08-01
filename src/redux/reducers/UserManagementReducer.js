@@ -1,9 +1,16 @@
-import { add_user, delete_user, edit_user } from "../types/UserManagementTypes";
+import {
+  add_user,
+  delete_user,
+  edit_user,
+  update_user,
+} from "../types/UserManagementTypes";
 
 const initialState = {
+  disableButton: true,
+  disableAccount: false,
   userList: [
     {
-      No: "1",
+      id: "1",
       account: "thanhdat24",
       name: "Thành Đạt",
       password: "123",
@@ -12,7 +19,7 @@ const initialState = {
       userType: "Customer", //Customer
     },
     {
-      No: "2",
+      id: "2",
       account: "ngocdiep11",
       name: "Ngọc Diệp",
       password: "123",
@@ -22,13 +29,13 @@ const initialState = {
     },
   ],
   userEdit: {
-    No: "",
+    id: "",
     account: "",
     name: "",
     password: "",
     email: "",
     phone: "",
-    userType: "", //Customer
+    userType: "Customer", //Customer
   },
 };
 
@@ -41,11 +48,17 @@ export const UserManagementReducer = (state = initialState, action) => {
       );
       if (index !== -1) {
         alert("Account already exists!");
-
         return { ...state };
       }
       userListUpdate.push(action.newUser);
-      console.log(userListUpdate);
+      state.userEdit = {
+        account: " ",
+        name: "",
+        password: "",
+        phone: "",
+        email: "",
+        userType: "Customer",
+      };
       return { ...state, userList: userListUpdate };
     }
     case delete_user: {
@@ -57,7 +70,47 @@ export const UserManagementReducer = (state = initialState, action) => {
       };
     }
     case edit_user: {
-      return { ...state, userEdit: action.user };
+      return {
+        ...state,
+        userEdit: action.user,
+        disableButton: false,
+        disableAccount: true,
+      };
+    }
+    case update_user: {
+      let { name, password, email, phone, userType } = action.newUser;
+      state.userEdit = {
+        ...state.userEdit,
+        name: name,
+        password: password,
+        email: email,
+        phone: phone,
+        userType: userType,
+      };
+
+      let userListUpdate = [...state.userList];
+      let index = userListUpdate.findIndex(
+        (user) => user.account === state.userEdit.account
+      );
+
+      if (index !== -1) {
+        userListUpdate[index] = state.userEdit;
+        state.userEdit = {
+          account: "",
+          name: "",
+          password: "",
+          phone: "",
+          email: "",
+          userType: "Customer",
+        };
+      }
+
+      return {
+        ...state,
+        userList: userListUpdate,
+        disableButton: true,
+        disableAccount: false,
+      };
     }
     default:
       return { ...state };
